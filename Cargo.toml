@@ -1,0 +1,23 @@
+[package]
+name = "blis-sys"
+version = "0.1.0"
+edition = "2021"
+exclude = [
+    "upstream/docs/",
+    "upstream/examples/",
+    "upstream/mpi_test/",
+    "upstream/**/test/",
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+bindgen = "0.59.2"
+
+[features]
+default = ["pthreads", "static"]
+
+pthreads = []
+openmp = []
+serial = []
+static = []
