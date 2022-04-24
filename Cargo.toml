@@ -1,6 +1,6 @@
 [package]
 name = "blis-sys"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["sarah <>"]
 description = "Rust bindings for BLIS"
@@ -15,15 +15,16 @@ exclude = [
     "upstream/**/test/",
 ]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[build-dependencies]
-bindgen = "0.59.2"
+[dependencies]
+openmp-sys = { version = "1.2", optional = true }
 
 [features]
 default = ["openmp", "static"]
 
 pthreads = []
-openmp = []
+openmp = ["openmp-sys"]
 serial = []
 static = []
+
+[build-dependencies]
+bindgen = "0.59.2"
