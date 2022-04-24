@@ -2,6 +2,12 @@
 name = "blis-sys"
 version = "0.1.0"
 edition = "2021"
+authors = ["sarah <>"]
+description = "Rust bindings for BLIS"
+readme = "README.md"
+repository = "https://github.com/kitegi/blis-sys/"
+license = "MIT"
+keywords = ["linear-algebra"]
 exclude = [
     "upstream/docs/",
     "upstream/examples/",
@@ -15,7 +21,7 @@ exclude = [
 bindgen = "0.59.2"
 
 [features]
-default = ["pthreads", "static"]
+default = ["openmp", "static"]
 
 pthreads = []
 openmp = []
