@@ -31,17 +31,13 @@ fn compile(blis_build: &Path, out_dir: &Path) {
         .current_dir(&blis_build)
         .arg(format!("--prefix={}", out_dir.to_string_lossy()));
     let threading = match (
-        env("CARGO_FEATURE_PTHREADS"),
-        env("CARGO_FEATURE_OPENMP"),
-        env("CARGO_FEATURE_SERIAL"),
+        env("CARGO_FEATURE_PARALLEL_PTHREADS"),
+        env("CARGO_FEATURE_PARALLEL_OPENMP"),
     ) {
-        (Some(_), None, None) => "pthreads",
-        (None, Some(_), None) => "openmp",
-        (None, None, Some(_)) => "no",
-        (None, None, None) => panic!(
-            "One of the following features must be enabled: 'pthreads', 'openmp', and 'serial'."
-        ),
-        _ => panic!("Features 'pthreads', 'openmp', and 'serial' are mutually exclusive."),
+        (Some(_), None) => "pthreads",
+        (None, Some(_)) => "openmp",
+        (None, None) => "no",
+        _ => panic!("Features 'parallel-pthreads' and 'parallel-openmp' are mutually exclusive."),
     };
     configure.arg(format!("--enable-threading={}", threading));
     if env("CARGO_FEATURE_STATIC").is_some() {
@@ -59,7 +55,13 @@ fn compile(blis_build: &Path, out_dir: &Path) {
         a
     } else {
         match &*rust_arch {
-            "x86_64" => "x86_64", // Build all microkernels; run-time dispatch
+            "x86_64" => {
+                if env("CARGO_FEATURE_RUNTIME_DISPATCH").is_some() {
+                    "x86_64" // Build all microkernels; run-time dispatch
+                } else {
+                    "auto"
+                }
+            }
 
             // BLIS does not have run-time arch detection on ARM or PowerPC.
             // We'll let BLIS configure determine the best match.

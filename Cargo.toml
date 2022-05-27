@@ -1,6 +1,6 @@
 [package]
 name = "blis-sys"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["sarah <>"]
 description = "Rust bindings for BLIS"
@@ -19,12 +19,12 @@ exclude = [
 openmp-sys = { version = "1.2", optional = true }
 
 [features]
-default = ["openmp", "static"]
+default = ["static"]
 
-pthreads = []
-openmp = ["openmp-sys"]
-serial = []
 static = []
+parallel-pthreads = []
+parallel-openmp = ["openmp-sys"]
+runtime-dispatch = []
 
 [build-dependencies]
 bindgen = "0.59.2"
